@@ -19,6 +19,7 @@ function onStartClick(e) {
   timerId = setTimeout(onStartClick, 1000);
   if (onStartClick) {
     refs.btnStart.disabled = true;
+    refs.btnStop.disabled = false;
   }
 }
 
@@ -26,5 +27,6 @@ function onStopClick(e) {
   clearTimeout(timerId);
   if (onStopClick) {
     refs.btnStart.disabled = false;
+    refs.btnStop.disabled = true;
   }
 }

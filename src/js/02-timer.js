@@ -27,27 +27,17 @@ const options = {
     }
     if (Date.now() < selectedDates[0]) {
       refs.btnStart.disabled = false;
-      ms = selectedDates[0] - options.defaultDate;
-      const time = convertMs(ms);
-      return time;
+      refs.btnStart.addEventListener('click', () => {
+        setInterval(() => {
+          console.log((delta = selectedDates[0] - this.defaultDate)); //не число
+          console.log((time = convertMs(delta))); //не число
+        }, 1000);
+      });
     }
   },
 };
 
 const initCalendar = flatpickr(refs.input, options);
-let dedlain = options.defaultDate;
-
-refs.btnStart.addEventListener('click', () => {
-  timer.start.bind(timer);
-});
-
-function timer() {
-  const today = new Date();
-  const delta = dedlain - today;
-  convertMs(ms);
-}
-
-setInterval(timer, 1000);
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -69,7 +59,7 @@ function convertMs(ms) {
 
   refs.spanDay.textContent = days;
   refs.spanHours.textContent = hours;
-  refs.spanMinutes.textContent = minute;
+  refs.spanMinutes.textContent = minutes;
   refs.spanSeconds.textContent = seconds;
 
   return { days, hours, minutes, seconds };

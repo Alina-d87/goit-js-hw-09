@@ -29,7 +29,6 @@ const options = {
       refs.btnStart.disabled = false;
       setTimeout(selectedDates);
       refs.btnStart.addEventListener('click', () => {
-        start();
         const randomData = selectedDates[0];
         setInterval(() => {
           const delta = randomData - this.defaultDate;

@@ -22,25 +22,32 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     if (Date.now() > selectedDates[0]) {
+      //Notiflix.Notify.Confirm.promt('Please choose a date in the future');
       alert('Please choose a date in the future');
       return;
     }
     if (Date.now() < selectedDates[0]) {
       refs.btnStart.disabled = false;
-      setTimeout(selectedDates);
-      refs.btnStart.addEventListener('click', () => {
-        const randomData = selectedDates[0];
-        setInterval(() => {
-          const delta = randomData - this.defaultDate;
-          const time = convertMs(delta);
-          console.log(time);
-        }, 1000);
-      });
+      clickStart();
     }
   },
 };
 
 const initCalendar = flatpickr(refs.input, options);
+
+function clickStart() {
+  refs.btnStart.addEventListener('click', onStart);
+}
+
+function onStart() {
+  const randomData = initCalendar.selectedDates[0];
+  setInterval(() => {
+    delta = randomData - new Date();
+    const time = convertMs(delta);
+    console.log(time);
+  }, 1000);
+  return;
+}
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time

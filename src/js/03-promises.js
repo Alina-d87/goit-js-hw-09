@@ -1,21 +1,60 @@
-const form = document.querySelector('form');
-console.log(form);
+import Notiflix from 'notiflix';
 
-form.addEventListener('submit', createPromise);
+const refs = {
+  form: document.querySelector('form'),
+  delay: document.querySelector('input[name=delay]'),
+  step: document.querySelector('input[name=step]'),
+  amount: document.querySelector('input[name=amount]'),
+};
+console.log(refs);
 
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
+refs.form.addEventListener('submit', onSubmit);
+
+function onSubmit(e) {
+  e.preventDefault();
+  const inputAmount = refs.amount.value;
+  console.log(inputAmount);
+  const inputDelay = refs.delay.value;
+  console.log(inputDelay);
+
+  for (let i = 0; i <= inputAmount; i += 1) {
+    const position = i;
+
+    createPromise(position, inputDelay)
+      .then(({ position, inputDelay }) => {
+        console.log(
+          Notiflix.Notify.success(
+            `✅ Fulfilled promise ${position} in ${inputDelay}ms`
+          )
+        );
+      })
+      .catch(({ position, inputDelay }) => {
+        console.log(
+          Notiflix.Notify.failure(
+            `❌ Rejected promise ${position} in ${inputDelay}ms`
+          )
+        );
+      });
   }
+  e.target.reset();
 }
 
-createPromise(2, 1500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+function createPromise(position, inputDelay) {
+  const shouldResolve = Math.random() > 0.3;
+  const inputStep = refs.step.value;
+  console.log(inputStep);
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (shouldResolve) {
+        console.log(
+          resolve(`✅ Fulfilled promise ${position} in ${inputDelay}ms`)
+        );
+      } else {
+        console.log(
+          reject(`❌ Rejected promise ${position} in ${inputDelay}ms`)
+        );
+      }
+    }, inputStep);
   });
+  return promise;
+}

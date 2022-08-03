@@ -27,10 +27,14 @@ const options = {
     }
     if (Date.now() < selectedDates[0]) {
       refs.btnStart.disabled = false;
+      setTimeout(selectedDates);
       refs.btnStart.addEventListener('click', () => {
+        start();
+        const randomData = selectedDates[0];
         setInterval(() => {
-          console.log((delta = selectedDates[0] - this.defaultDate)); //не число
-          console.log((time = convertMs(delta))); //не число
+          const delta = randomData - this.defaultDate;
+          const time = convertMs(delta);
+          console.log(time);
         }, 1000);
       });
     }

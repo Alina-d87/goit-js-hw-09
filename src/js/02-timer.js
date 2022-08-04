@@ -41,7 +41,7 @@ function clickStart() {
 function onStart() {
   const randomData = initCalendar.selectedDates[0];
   setInterval(() => {
-    delta = randomData - new Date();
+    const delta = randomData - new Date();
     const time = convertMs(delta);
     console.log(time);
   }, 1000);

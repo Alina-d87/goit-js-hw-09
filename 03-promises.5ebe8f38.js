@@ -1,2 +1,0 @@
-!function(){var o=document.querySelector("form");function n(o,n){Math.random()}console.log(o),o.addEventListener("submit",n),n().then((function(o){var n=o.position,c=o.delay;console.log("✅ Fulfilled promise ".concat(n," in ").concat(c,"ms"))})).catch((function(o){var n=o.position,c=o.delay;console.log("❌ Rejected promise ".concat(n," in ").concat(c,"ms"))}))}();
-//# sourceMappingURL=03-promises.5ebe8f38.js.map

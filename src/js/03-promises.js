@@ -27,11 +27,13 @@ function onSubmit(e) {
         Notiflix.Notify.success(
           `✅ Fulfilled promise ${position} in ${inputDelay}ms`
         );
+        return;
       })
       .catch(({ position, inputDelay }) => {
         Notiflix.Notify.failure(
           `❌ Rejected promise ${position} in ${inputDelay}ms`
         );
+        return;
       });
   }
 

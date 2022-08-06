@@ -1,7 +1,7 @@
 import Notiflix from 'notiflix';
 
 const refs = {
-  form: document.querySelector('form'),
+  form: document.querySelector('.form'),
   delay: document.querySelector('input[name=delay]'),
   step: document.querySelector('input[name=step]'),
   amount: document.querySelector('input[name=amount]'),
@@ -14,24 +14,24 @@ let position;
 
 function onSubmit(e) {
   e.preventDefault();
-  const inputAmount = refs.amount.value;
-  console.log(inputAmount);
-  const inputDelay = refs.delay.value;
-  console.log(inputDelay);
+  const amount = refs.amount.value;
+  console.log(amount);
+  let delay = refs.delay.value;
+  console.log(delay);
 
-  for (let i = 0; i <= inputAmount; i += 1) {
+  for (let i = 0; i <= amount; i += 1) {
     position = i;
 
-    createPromise(position, inputDelay)
-      .then(({ position, inputDelay }) => {
+    createPromise(position, delay)
+      .then(({ position, delay }) => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${inputDelay}ms`
+          `✅ Fulfilled promise ${position} in ${delay}ms`
         );
         return;
       })
-      .catch(({ position, inputDelay }) => {
+      .catch(({ position, delay }) => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${inputDelay}ms`
+          `❌ Rejected promise ${position} in ${delay}ms`
         );
         return;
       });
@@ -40,19 +40,18 @@ function onSubmit(e) {
   e.target.reset();
 }
 
-function createPromise(position, inputDelay) {
-  const shouldResolve = Math.random() > 0.3;
+function createPromise(position, delay) {
   const inputStep = refs.step.value;
   console.log(inputStep);
 
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
+      const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
-        resolve(`✅ Fulfilled promise ${position} in ${inputDelay}ms`);
+        resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
       } else {
-        reject(`❌ Rejected promise ${position} in ${inputDelay}ms`);
+        reject(`❌ Rejected promise ${position} in ${delay}ms`);
       }
     }, inputStep);
   });
-  return promise;
 }

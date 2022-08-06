@@ -10,7 +10,6 @@ const refs = {
   spanMinutes: document.querySelector('[data-minutes]'),
   spanSeconds: document.querySelector('[data-seconds]'),
 };
-console.log(refs);
 
 refs.btnStart.disabled = true;
 
@@ -20,32 +19,57 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
     if (Date.now() > selectedDates[0]) {
       Notiflix.Notify.failure('Please choose a date in the future');
       return;
-    }
-    if (Date.now() < selectedDates[0]) {
-      refs.btnStart.disabled = false;
-      clickStart();
     }
   },
 };
 
 const initCalendar = flatpickr(refs.input, options);
 
-function clickStart() {
-  refs.btnStart.addEventListener('click', onStart);
+btnStartDisable();
+clickStart();
+
+function btnStartDisable() {
+  refs.btnStart.disabled = false;
 }
 
-function onStart() {
-  const randomData = initCalendar.selectedDates[0];
-  setInterval(() => {
-    const delta = randomData - new Date();
-    const time = convertMs(delta);
-    console.log(time);
-  }, 1000);
-  return;
+class Timer {
+  constructor(convertMs) {
+    this.intervalId = null;
+    this.isActive = false;
+    this.convertMs = convertMs;
+  }
+  start() {
+    if (this.isActive) {
+      return;
+    }
+    const randomData = initCalendar.selectedDates[0];
+    this.isActive = true;
+    this.intervalId = setInterval(() => {
+      const currentTime = new Date();
+      const delta = randomData - currentTime;
+      const time = convertMs(delta);
+      console.log(time);
+    }, 1000);
+  }
+  stop() {
+    if (this.randomData <= 0) {
+      clearInterval(this.intervalId);
+      this.isActive = false;
+      options.enableTime = false;
+    }
+  }
+}
+
+const onTimer = new Timer({ convertMs: convertMs });
+
+function clickStart() {
+  refs.btnStart.addEventListener('click', () => {
+    onTimer.start();
+    onTimer.stop();
+  });
 }
 
 function convertMs(ms) {

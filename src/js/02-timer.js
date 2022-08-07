@@ -19,58 +19,48 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
+    console.log(selectedDates);
     if (Date.now() > selectedDates[0]) {
       Notiflix.Notify.failure('Please choose a date in the future');
+      return;
+    }
+    if (Date.now() < selectedDates[0]) {
+      refs.btnStart.disabled = false;
       return;
     }
   },
 };
 
 const initCalendar = flatpickr(refs.input, options);
+console.log(initCalendar);
+const startTimer = initCalendar.selectedDates[0];
+let intervalId = null;
+let ms;
 
-btnStartDisable();
-clickStart();
+refs.btnStart.addEventListener('click', onTimer);
 
-function btnStartDisable() {
-  refs.btnStart.disabled = false;
+function onTimer(ms) {
+  startTimer;
+  intervalId = setInterval(() => {
+    ms = startTimer - new Date();
+    console.log(ms);
+    const time = convertMs(ms);
+    console.log(time);
+    stopTimer(ms);
+  }, 1000);
 }
 
-class Timer {
-  constructor(convertMs) {
-    this.intervalId = null;
-    this.isActive = false;
-    this.convertMs = convertMs;
-  }
-  start() {
-    if (this.isActive) {
-      return;
-    }
-    const randomData = initCalendar.selectedDates[0];
-    this.isActive = true;
-    this.intervalId = setInterval(() => {
-      const currentTime = new Date();
-      const delta = randomData - currentTime;
-      const time = convertMs(delta);
-      console.log(time);
-    }, 1000);
-  }
-  stop() {
-    if (this.randomData <= 0) {
-      clearInterval(this.intervalId);
-      this.isActive = false;
-      options.enableTime = false;
-    }
+function stopTimer() {
+  if (startTimer <= new Date()) {
+    console.log('stop');
+    clearInterval(intervalId);
   }
 }
 
-const onTimer = new Timer({ convertMs: convertMs });
-
-function clickStart() {
-  refs.btnStart.addEventListener('click', () => {
-    onTimer.start();
-    onTimer.stop();
-  });
-}
+//ms <= 0; зупинка після 1ї секунди роботи таймера
+//if (startTimer <= new Date()) зупинка -1
+//startTimer == new Date(); таймер продовжуває рахувати
+//if (startTimer === new Date()) так же продовжує рахувати
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time

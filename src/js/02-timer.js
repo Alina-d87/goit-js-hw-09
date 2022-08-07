@@ -54,13 +54,16 @@ function stopTimer() {
   if (startTimer <= new Date()) {
     console.log('stop');
     clearInterval(intervalId);
+    return interfece();
   }
 }
 
-//ms <= 0; зупинка після 1ї секунди роботи таймера
-//if (startTimer <= new Date()) зупинка -1
-//startTimer == new Date(); таймер продовжуває рахувати
-//if (startTimer === new Date()) так же продовжує рахувати
+function interfece() {
+  refs.spanDay.textContent = '00';
+  refs.spanHours.textContent = '00';
+  refs.spanMinutes.textContent = '00';
+  refs.spanSeconds.textContent = '00';
+}
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time

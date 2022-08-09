@@ -26,21 +26,27 @@ const options = {
     }
     if (Date.now() < selectedDates[0]) {
       refs.btnStart.disabled = false;
-      return;
     }
   },
 };
 
 const initCalendar = flatpickr(refs.input, options);
 console.log(initCalendar);
-const startTimer = initCalendar.selectedDates[0];
+
 let intervalId = null;
-let ms;
+let ms = null;
+let isActive = false;
+const startTimer = initCalendar.selectedDates[0];
 
 refs.btnStart.addEventListener('click', onTimer);
 
 function onTimer(ms) {
-  startTimer;
+  const startTimer = initCalendar.selectedDates[0];
+  if (isActive) {
+    isActive = true;
+    return;
+  }
+
   intervalId = setInterval(() => {
     ms = startTimer - new Date();
     console.log(ms);

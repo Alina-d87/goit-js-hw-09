@@ -3,7 +3,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 const refs = {
-  btnStart: document.querySelector('button'),
+  btnStart: document.querySelector('[data-start'),
   input: document.querySelector('#datetime-picker'),
   spanDay: document.querySelector('[data-days]'),
   spanHours: document.querySelector('[data-hours]'),
@@ -11,15 +11,12 @@ const refs = {
   spanSeconds: document.querySelector('[data-seconds]'),
 };
 
-refs.btnStart.disabled = true;
-
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates);
     if (Date.now() > selectedDates[0]) {
       Notiflix.Notify.failure('Please choose a date in the future');
       return;
@@ -30,45 +27,27 @@ const options = {
   },
 };
 
+refs.btnStart.disabled = true;
+
 const initCalendar = flatpickr(refs.input, options);
-console.log(initCalendar);
 
-let intervalId = null;
-let ms = null;
-let isActive = false;
-const startTimer = initCalendar.selectedDates[0];
+let timerId = null;
+let ms = 0;
 
-refs.btnStart.addEventListener('click', onTimer);
+refs.btnStart.addEventListener('click', timeData);
 
-function onTimer(ms) {
-  const startTimer = initCalendar.selectedDates[0];
-  if (isActive) {
-    isActive = true;
-    return;
-  }
-
-  intervalId = setInterval(() => {
-    ms = startTimer - new Date();
-    console.log(ms);
+function timeData() {
+  const selectedData = initCalendar.selectedDates[0];
+  console.log(selectedData);
+  timerId = setInterval(() => {
+    ms = selectedData - new Date();
+    if (ms <= 0) {
+      clearInterval(timerId);
+      return;
+    }
     const time = convertMs(ms);
     console.log(time);
-    stopTimer(ms);
   }, 1000);
-}
-
-function stopTimer() {
-  if (startTimer <= new Date()) {
-    console.log('stop');
-    clearInterval(intervalId);
-    return interfece();
-  }
-}
-
-function interfece() {
-  refs.spanDay.textContent = '00';
-  refs.spanHours.textContent = '00';
-  refs.spanMinutes.textContent = '00';
-  refs.spanSeconds.textContent = '00';
 }
 
 function convertMs(ms) {
